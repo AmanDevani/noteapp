@@ -16,16 +16,11 @@ app.use('/api/notes', notes)
 
 dotenv.config().parsed;
 
-app.get('/', (req, res) => {
-    res.json("note app")
-})
+//static files
 app.use(express.static(path.join(__dirname, "./client/build")));
 app.get("*", function (_, res) {
   res.sendFile(
-    path.join(__dirname, "./client/build/index.html"),
-    function (err) {
-      res.status(500).send(err);
-    }
+    path.join(__dirname, "./client/build/index.html")
   );
 });
 
