@@ -5,11 +5,11 @@ const auth = require('./routes/auth')
 const notes = require('./routes/notes');
 const dotenv = require('dotenv');
 const PORT = process.env.PORT || 5000;
-
+const path = require('path');
 
 const app = express()
 app.use(express.json())
-app.use(cors())
+app.use(cors({origin:"*"}))
 
 app.use('/api/auth', auth)
 app.use('/api/notes', notes)
@@ -19,6 +19,15 @@ dotenv.config().parsed;
 app.get('/', (req, res) => {
     res.json("note app")
 })
+app.use(express.static(path.join(__dirname, "./client/build")));
+app.get("*", function (_, res) {
+  res.sendFile(
+    path.join(__dirname, "./client/build/index.html"),
+    function (err) {
+      res.status(500).send(err);
+    }
+  );
+});
 
 //listen app
 app.listen(PORT, () => {
